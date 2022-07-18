@@ -8,25 +8,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
-   options.AddDefaultPolicy(
-       policy =>
-       {
-           policy.WithOrigins("http://localhost:3000/")
-           .AllowAnyHeader()
-           .AllowAnyMethod();
-       });
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+        });
 });
 builder.Services.AddSignalR();
 
 
 var app = builder.Build();
-app.UseCors();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors();
 app.MapHub<ChatHub>("/ChatHub");
 app.UseHttpsRedirection();
 
@@ -37,7 +38,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateTime.Now.AddDays(index),
