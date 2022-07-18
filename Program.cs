@@ -1,3 +1,5 @@
+using ChatAPI.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +16,8 @@ builder.Services.AddCors(options =>
            .AllowAnyMethod();
        });
 });
+builder.Services.AddSignalR();
+
 
 var app = builder.Build();
 app.UseCors();
@@ -23,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.MapHub<ChatHub>("/ChatHub");
 app.UseHttpsRedirection();
 
 var summaries = new[]
